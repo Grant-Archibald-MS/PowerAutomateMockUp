@@ -14,6 +14,7 @@ namespace Parser.FlowParser
 {
     public interface IFlowRunner
     {
+        void InitializeFlowRunner(TextReader streamReader);
         void InitializeFlowRunner(in string path);
         Task<FlowReport> Trigger();
         Task<FlowReport> Trigger(ValueContainer triggerOutput);
@@ -52,7 +53,11 @@ namespace Parser.FlowParser
 
         public void InitializeFlowRunner(in string path)
         {
-            using var streamReader = new StreamReader(path);
+            InitializeFlowRunner(new StreamReader(path));
+        }
+
+        public void InitializeFlowRunner(TextReader streamReader)
+        {
             using var jsonTextReader = new JsonTextReader(streamReader);
 
             var flowJson = JToken.ReadFrom(jsonTextReader);
@@ -135,7 +140,7 @@ namespace Parser.FlowParser
                     break;
                 }
 
-                // If an action failes inside a scope, and a suitable action isn't found inside the given scope, that 
+                // If an action fails inside a scope, and a suitable action isn't found inside the given scope, that 
                 // actions status is transferred to be the scope status. This isn't the case atm
 
                 var actionDescName = currentAd.Name;

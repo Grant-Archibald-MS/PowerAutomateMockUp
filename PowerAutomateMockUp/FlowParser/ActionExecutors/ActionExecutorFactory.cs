@@ -27,9 +27,16 @@ namespace Parser.FlowParser.ActionExecutors
                 <IEnumerable<ActionExecutorRegistration>>();
             var axRegistration = axRegistrationList
                 .LastOrDefault(x => x.ActionName == key);
-            return axRegistration == null
-                ? null
-                : _sp.GetRequiredService(axRegistration.Type)
+            if ( axRegistration == null )
+            {
+                return null;
+            }
+
+            if ( axRegistration.Instance != null )
+            {
+                return axRegistration.Instance;
+            }
+            return  _sp.GetRequiredService(axRegistration.Type)
                     as ActionExecutorBase;
         }
 
