@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Threading.Tasks;
 using Microsoft.Extensions.DependencyInjection;
 using NUnit.Framework;
@@ -13,7 +14,8 @@ namespace Test
     [TestFixture]
     public class FullFlowTestV2
     {
-        private static readonly string TestFlowPath = System.IO.Path.GetFullPath(@"FlowSamples");
+        private static readonly string TestFlowPath = Path.Combine(Path.GetDirectoryName(typeof(FullFlowTestWithException).Assembly.Location), "..", "..", "..", "FlowSamples");
+
 
         [Test]
         public async Task TestFlowFalse()

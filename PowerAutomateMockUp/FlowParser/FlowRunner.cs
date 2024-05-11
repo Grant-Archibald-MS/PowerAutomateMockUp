@@ -102,7 +102,7 @@ namespace Parser.FlowParser
 
         private async Task RunFlow()
         {
-            var currentAd = _scopeManager.CurrentActionDescriptions.First(
+            var currentAd = _scopeManager.CurrentActionDescriptions.FirstOrDefault(
                 ad => !ad.Value.SelectToken("$.runAfter").Any());
 
             while (currentAd != null)
