@@ -14,7 +14,7 @@ namespace Test
         {
             var valueContainer = new ValueContainer(new Dictionary<string, ValueContainer>
             {
-                {"body/contactid", new ValueContainer("guid")},
+                {"body/contactid", new ValueContainer(Guid.Empty)},
                 {"body/fullname", new ValueContainer("John Doe")},
                 {
                     "body", new ValueContainer(new Dictionary<string, ValueContainer>
@@ -34,7 +34,7 @@ namespace Test
 
             Assert.AreEqual(3, body.Keys.Count);
 
-            Assert.AreEqual("guid", body["contactid"].GetValue<string>());
+            Assert.AreEqual(Guid.Empty, body["contactid"].GetValue<Guid>());
             Assert.AreEqual("John Doe", body["fullname"].GetValue<string>());
 
             var children = body["child"];

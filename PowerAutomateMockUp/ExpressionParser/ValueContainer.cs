@@ -38,6 +38,16 @@ namespace Parser.ExpressionParser
                     _value = bValue;
                     _type = ValueType.Boolean;
                 }
+                else if (DateTime.TryParse(value, out var dateValue))
+                {
+                    _value = dateValue;
+                    _type = ValueType.DateTime;
+                }
+                else if (Guid.TryParse(value, out var guidValue))
+                {
+                    _value = guidValue;
+                    _type = ValueType.Guid;
+                }
                 else
                 {
                     _value = value;
@@ -73,6 +83,18 @@ namespace Parser.ExpressionParser
         {
             _value = intValue;
             _type = ValueType.Integer;
+        }
+
+        public ValueContainer(DateTime dateValue)
+        {
+            _value = dateValue;
+            _type = ValueType.DateTime;
+        }
+
+        public ValueContainer(Guid dateValue)
+        {
+            _value = dateValue;
+            _type = ValueType.Guid;
         }
 
         public ValueContainer(bool boolValue)
@@ -134,12 +156,14 @@ namespace Parser.ExpressionParser
         public enum ValueType
         {
             Boolean,
+            DateTime,
             Integer,
             Float,
             String,
             Object,
             Array,
-            Null
+            Null,
+            Guid
         }
 
         public T GetValue<T>()
@@ -295,6 +319,9 @@ namespace Parser.ExpressionParser
                 var t = (JValue) jToken;
                 switch (t.Value)
                 {
+                    case DateTime d:
+                        list.Add(new ValueContainer(d));
+                        break;
                     case int i:
                         list.Add(new ValueContainer(i));
                         break;
@@ -325,6 +352,7 @@ namespace Parser.ExpressionParser
              */
             return _type switch
             {
+                ValueType.DateTime => _value.ToString(),
                 ValueType.Boolean => _value.ToString(),
                 ValueType.Integer => _value.ToString(),
                 ValueType.Float => _value.ToString(),
@@ -358,6 +386,8 @@ namespace Parser.ExpressionParser
             {
                 switch (_value)
                 {
+                    case DateTime d:
+                        return d.CompareTo(other._value);
                     case bool b:
                         return b.CompareTo(other._value);
                     case int i:
