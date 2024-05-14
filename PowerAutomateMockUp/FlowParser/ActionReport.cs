@@ -15,5 +15,7 @@ namespace Parser.FlowParser
         public string ActionName { get; set; }
         public int ActionOrder { get; set; }
         public JToken ActionJson { get; set; }
+
+        public int Called { get; set; } = 0;
     }
 }

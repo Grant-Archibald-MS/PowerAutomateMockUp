@@ -124,6 +124,20 @@ namespace Parser.FlowParser
                 {
                     var jsonInputs = currentAd.First?.SelectToken("$.inputs");
 
+                    var called = 0;
+
+                    if (!_actionSates.ContainsKey(currentAd.Name))
+                    {
+                        // Action state does not exist add to the state
+                        _actionSates.Add(currentAd.Name, null);
+                    }
+
+                    var existing = _actionSates[currentAd.Name];
+                    if ( existing != null)
+                    {
+                        called = existing.Called;
+                    }
+
                     _actionSates[currentAd.Name] = new ActionReport
                     {
                         ActionJson = jsonInputs,
@@ -131,7 +145,8 @@ namespace Parser.FlowParser
                                       (jsonInputs == null ? null : new ValueContainer(jsonInputs, _expressionEngine)),
                         ActionOutput = actionResult,
                         ActionOrder = _actionsExecuted++,
-                        ActionName = actionExecutor?.ActionName
+                        ActionName = actionExecutor?.ActionName,
+                        Called = called++
                     };
                 }
 
